@@ -1,0 +1,30 @@
+# R-
+     mydata <- transform(mydata,sumx=x1+x2,meanx=(x1+x2)/2) # 创建新的变量
+
+#创建新的变量 
+leadship <- within(leadership,{agecat <- NA
+                               agecat[age >75]  <-"elder"
+                               agecat[age>=55 & age<=75]  <-"middle age"
+                               agecat[age <55] <- "young" }
+ 我们创建了agecat变量，并将每一行都设为缺失值。括号中剩下的语句接下来依次执行。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
