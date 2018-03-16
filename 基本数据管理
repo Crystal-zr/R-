@@ -8,6 +8,9 @@ leadship <- within(leadership,{agecat <- NA
                                agecat[age <55] <- "young" }
  我们创建了agecat变量，并将每一行都设为缺失值。括号中剩下的语句接下来依次执行。
 
+二维列联表：CrossTable(x,y)
+多维列联表：xtabs(~ x1+x2+x3,data=)    ,ftable(mydata)
+
 
 
 
