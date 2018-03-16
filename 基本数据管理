@@ -10,10 +10,11 @@ leadship <- within(leadership,{agecat <- NA
 
 二维列联表：CrossTable(x,y)
 多维列联表：xtabs(~ x1+x2+x3,data=)    ,ftable(mydata)
-
-
-
-
+用chisq.test()函数对二维表的行变量和列变量进行卡方独立性检验
+fisher.test()函数进行Fisher精确检验。Fisher精确检验的原假设是：边界固定的列联表中行和列是相互独立的
+mantelhaen.test()函数可用来进行Cochran—Mantel—Haenszel卡方检验，其原假设是，两个名义变量在第三个变量的每一层中都是条件独立的。下列代码可以检验治疗情况和改善情况在
+性别的每一水平下是否独立。
+assocstats()函数二维列联表的相关性度量
 
 
 
