@@ -16,10 +16,21 @@ mantelhaen.test()函数可用来进行Cochran—Mantel—Haenszel卡方检验，
 性别的每一水平下是否独立。
 assocstats()函数二维列联表的相关性度量
 
+install.packsges("ggm")
+pcor(u,s) 计算偏自相关系数。其中的u是一个数值向量，前两个数值表示要计算相关系数的变量下标，其余的数值为条件变量（即要排除、固定的变量）的下标。S为变量的协方差阵
 
 
+相关性的显著性检验 
+cor.test(x,y,alternative= , method=) 其中的x和y为要检验相关性的变量，alternative则用来指定进行双侧检验或单侧检验（取值
+为"two.side"、"less"或"greater"），而method用以指定要计算的相关类型（"pearson"、"kendall"或"spearman"）。
 
+通过corr.test计算相关矩阵并进行显著性检验
+corr.test(x, y = NULL, use = , method= ,) 参数use=的取值可为"pairwise"或"complete"（分别表示对缺失值执行成对删除或行删
+除）。参数method=的取值可为"pearson"（默认值）、"spearman"或"kendall"
 
+其他显著性检验
+pcor.test(r,q,n)其中的r是由pcor()函数计算得到的偏相关系数，q为要控制的变量数（以数值表示位置），n为样本大小。pcor.test()
+函数可以用来检验在控制一个或多个额外变量时两个变量之间的条件独立性
 
 
 
