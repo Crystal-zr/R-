@@ -1,5 +1,5 @@
 # R-
-     mydata <- transform(mydata,sumx=x1+x2,meanx=(x1+x2)/2) # 创建新的变量
+mydata <- transform(mydata,sumx=x1+x2,meanx=(x1+x2)/2) # 创建新的变量
 
 #创建新的变量 
 leadship <- within(leadership,{agecat <- NA
@@ -12,25 +12,35 @@ leadship <- within(leadership,{agecat <- NA
 多维列联表：xtabs(~ x1+x2+x3,data=)    ,ftable(mydata)
 用chisq.test()函数对二维表的行变量和列变量进行卡方独立性检验
 fisher.test()函数进行Fisher精确检验。Fisher精确检验的原假设是：边界固定的列联表中行和列是相互独立的
-mantelhaen.test()函数可用来进行Cochran—Mantel—Haenszel卡方检验，其原假设是，两个名义变量在第三个变量的每一层中都是条件独立的。下列代码可以检验治疗情况和改善情况在
-性别的每一水平下是否独立。
+mantelhaen.test()函数可用来进行Cochran—Mantel—Haenszel卡方检验，其原假设是，两个名义变量在第三个变量的每一层中都是条件
+   独立的。下列代码可以检验治疗情况和改善情况在性别的每一水平下是否独立。
 assocstats()函数二维列联表的相关性度量
 
 install.packsges("ggm")
-pcor(u,s) 计算偏自相关系数。其中的u是一个数值向量，前两个数值表示要计算相关系数的变量下标，其余的数值为条件变量（即要排除、固定的变量）的下标。S为变量的协方差阵
+pcor(u,s) 计算偏自相关系数。其中的u是一个数值向量，前两个数值表示要计算相关系数的变量下标，其余的数值为条件变量（即要排除、
+    固定的变量）的下标。S为变量的协方差阵
 
 
 相关性的显著性检验 
 cor.test(x,y,alternative= , method=) 其中的x和y为要检验相关性的变量，alternative则用来指定进行双侧检验或单侧检验（取值
-为"two.side"、"less"或"greater"），而method用以指定要计算的相关类型（"pearson"、"kendall"或"spearman"）。
+    为"two.side"、"less"或"greater"），而method用以指定要计算的相关类型（"pearson"、"kendall"或"spearman"）。
 
 通过corr.test计算相关矩阵并进行显著性检验
 corr.test(x, y = NULL, use = , method= ,) 参数use=的取值可为"pairwise"或"complete"（分别表示对缺失值执行成对删除或行删
-除）。参数method=的取值可为"pearson"（默认值）、"spearman"或"kendall"
+    除）。参数method=的取值可为"pearson"（默认值）、"spearman"或"kendall"
 
 其他显著性检验
 pcor.test(r,q,n)其中的r是由pcor()函数计算得到的偏相关系数，q为要控制的变量数（以数值表示位置），n为样本大小。pcor.test()
-函数可以用来检验在控制一个或多个额外变量时两个变量之间的条件独立性
+    函数可以用来检验在控制一个或多个额外变量时两个变量之间的条件独立性
+
+
+t.test(y1,y2,paired=TRUE) 检验两个非独立组的数值向量，paired = TRUE,一一配对。
+wilcox.test(y1~x,data= )若两组数据独立，可以使用Wilcoxon秩和检验，适用于两组比较。
+friedman.test(y~A|B,data=)多于两组的比较.其中的y是数值型结果变量，A是一个分组变量，而B是一个用以认定匹配观测的区组变量（bl
+     ockingvariable）。在以上两例中，data皆为可选参数，它指定了包含这些变量的矩阵或数据框。
+kruskal.test(y~A,data = )。如果各组独立，则Kruskal—Wallis检验将是一种实用的方法。如果各组不独
+     立（如重复测量设计或随机区组设计），那么Friedman检验会更合适。
+非参数多组比较
 
 
 
