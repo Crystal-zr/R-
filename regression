@@ -1,4 +1,4 @@
-# R-回归
+.# R-回归
 一般线性回归  lm(y~x1+x2+...+xk,data=  )
     ~ 分隔符号，左边为响应变量，右边为解释变量。例如，要通过x、z和w预测y，代码为y ~ x + z + w
     + 分隔预测变量
@@ -24,6 +24,59 @@ predict() 用拟合模型对新的数据集预测响应变量值
 
 多元线性回归
 library(car) 中scatterplotMatrix()函数则会生成散点图矩阵  sactterplotMatrix(矩阵，spread=FALSE,lty.smooth=2,main=" 名字"）
+effects包中的effect()函数，你可以用图形展示交互项的结果.
+plot(effect(term,mod,xlevels),multiline=TRUE)term即模型要画的项，mod为通过lm()拟合的模型，xlevels是一个列表，指定变量要设定的
+常量值，multiline=TRUE选项表示添加相应直线
+回归诊断:通过confint()函数的输出来看看多元回归问题。
+R基础安装中提供了大量检验回归分析中统计假设的方法。最常见的方法就是对lm()函数返回的对象使用plot()函数，可以生成评价模型拟合情况的四幅图形
+     fit <- lm(weight~height,data=women)
+     par(mfrow=c(2,2))
+     plot(fit)
+    图形解读：
+    正态性 当预测变量值固定时，因变量成正态分布，则残差值也应该是一个均值为0的正
+态分布。正态Q-Q图（Normal Q-Q，右上）是在正态分布对应的值下，标准化残差的概率
+图。若满足正态假设，那么图上的点应该落在呈45度角的直线上；若不是如此，那么就
+违反了正态性的假设。
+   独立性 你无法从这些图中分辨出因变量值是否相互独立，只能从收集的数据中来验证。
+上面的例子中，没有任何先验的理由去相信一位女性的体重会影响另外一位女性的体重。
+假若你发现数据是从一个家庭抽样得来的，那么可能必须要调整模型独立性的假设。
+    线性 若因变量与自变量线性相关，那么残差值与预测（拟合）值就没有任何系统关联。
+换句话说，除了白噪声，模型应该包含数据中所有的系统方差。在“残差图与拟合图”
+（Residuals vs Fitted，左上）中可以清楚的看到一个曲线关系，这暗示着你可能需要对回
+归模型加上一个二次项。
+    同方差性 若满足不变方差假设，那么在位置尺度图（Scale-Location Graph，左下）中，
+水平线周围的点应该随机分布。该图似乎满足此假设。
+
+
+qqPlot() 分位数比较图   p199
+durbinWatsonTest() 对误差自相关性做Durbin-Watson检验
+crPlots() 成分与残差图
+ncvTest() 对非恒定的误差方差做得分检验
+spreadLevelPlot() 分散水平检验
+outlierTest() Bonferroni离群点检验
+avPlots() 添加的变量图形
+inluencePlot() 回归影响图
+scatterplot() 增强的散点图
+scatterplotMatrix() 增强的散点图矩阵
+vif() 方差膨胀因子
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
