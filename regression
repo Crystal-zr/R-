@@ -61,14 +61,52 @@ scatterplotMatrix() 增强的散点图矩阵
 vif() 方差膨胀因子
 
 
+标准方法：
+1.正态性检验 ：library(car)
+            fit <- lm(Murder~Populaton+Illiteracy+Income+Frost,data=states)
+            qqPlot(fit,labels=row.names(states),id.method="identify",simulation=TRUE,main="qq-plot")
+绘制学生化残差图的函数   
+            residplot <- function(fit,nbreaks=10){
+                        z <- rstudent(fit)
+                        hist(z,breaks = nbreaks,freq = FALSE,
+                               xlab = "studentized residual",
+                               main = "distribution of error")
+                        rug(jitter(z),col = "brown")
+                        curve(dnorm(x,mean = mean(z),sd=sd(z)),
+                               add = TRUE,col="blue",lwd=2)
+                        lines(density(z)$x,density(z)$y,
+                               col="red",lwd=2,lty=2)
+                        legend("topright",
+                               legend = c("normal curve","kernel density curve"),
+                               lty=1:2,col = c("blue","red"),cex=.7)
+                               }
+              residplot(fit)
+2.误差的独立性:  durbinWatsonTest(fit)
+3.线性：         crPlots(fit)
+4.同方差性：     ncvTest(fit)
+                spreadLevelPlot(fit)
 
+线性模型假设的综合验证：
+             library(gvlma)
+             gvmodel <- gvlma(fit)
+             summary(gvmodel)
 
+多重共线性：可用统计量VIF（Variance Inflation Factor，方差膨胀因子）进行检测。VIF的平方根表示变量回归参数的置信区间能膨胀
+     为与模型无关的预测变量的程度（因此而得名）。car包中的vif()函数提供VIF值。一般原则下， 跟号下vif >2就表明存在多重共线性问题。
+    vif(fit)
+    sqrt(vif(fit))>2 # problem?
 
+离群点：outlierTest(fit)
+高杠杆值点：hat.plot <- function(fit){
+                        p <- length(coefficients(fit))
+                        n <- length(fitted(fit))
+                        plot(hatvalues(fit),main="index plot of hat value")
+                        abline(h=c(2,3)*p/n,col="red",lty=2)
+                        identify(1:n,hatvalues(fit),names(hatvalues(fit)))
+                      }
+           hat.plot(fit)
 
-
-
-
-
+    
 
 
 
