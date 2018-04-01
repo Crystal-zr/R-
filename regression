@@ -97,7 +97,9 @@ vif() 方差膨胀因子
     sqrt(vif(fit))>2 # problem?
 
 离群点：outlierTest(fit)
-高杠杆值点：hat.plot <- function(fit){
+高杠杆值点：高杠杆值的观测点可通过帽子统计量（hat statistic）判断。对于一个给定的数据集，帽子均值为p/n，其中p 是模型估计的参数数
+           目（包含截距项），n 是样本量。一般来说，若观测点的帽子值大于帽子均值的2或3倍，即可以认定为高杠杆值点。
+           hat.plot <- function(fit){
                         p <- length(coefficients(fit))
                         n <- length(fitted(fit))
                         plot(hatvalues(fit),main="index plot of hat value")
@@ -105,7 +107,17 @@ vif() 方差膨胀因子
                         identify(1:n,hatvalues(fit),names(hatvalues(fit)))
                       }
            hat.plot(fit)
+强影响点：有两种方法可以检测强影响点：Cook距离，或称D统计量，以及变量添加图（added variableplot）。一般来说，Cook’s D值大于
+           4/(nk 1)，则表明它是强影响点，其中n 为样本量大小，k 是预测变量数目。
+         cutoff <- 4/(nrow(states)-length(fit$coefficients)-2)
+         plot(fit,which=4,cook.levels = cutoff)
+         abline(h=cutoff,lty=2,col="red")
 
+         avPlots(fit,ask = FALSE,onepage=TRUE,id.method="identify")
+         influencePlot(fit,id.method = "identify",main="influence plot",
+              sub="cricle size is proportional to cook's distance")
+纵坐标超过+2或小于-2的州可被认为是离群点，水平轴超过0.2或0.3的州有高杠杆值（通常为预测值的组合）。圆圈大小与影响成比例，圆圈很大
+        的点可能是对模型参数的估计造成的不成比例影响的强影响点
     
 
 
