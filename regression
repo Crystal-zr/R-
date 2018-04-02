@@ -118,18 +118,81 @@ vif() 方差膨胀因子
               sub="cricle size is proportional to cook's distance")
 纵坐标超过+2或小于-2的州可被认为是离群点，水平轴超过0.2或0.3的州有高杠杆值（通常为预测值的组合）。圆圈大小与影响成比例，圆圈很大
         的点可能是对模型参数的估计造成的不成比例影响的强影响点
-    
 
 
+模型比较    anova()函数同时还对是否应该添加Income和Frost到线性模型中进行了检验。由于检验不显著（p=0.994），因此我们可以得出结论
+          ：不需要将这两个变量添加到线性模型中，可以将它们从模型中删除。
+           AIC（Akaike Information Criterion，赤池信息准则）也可以用来比较模型，它考虑了模型的统计拟合度以及用来拟合的参数数目。
+           AIC值越小的模型要优先选择，
+fit1 <- lm(Murder~Population+Illiteracy+Income+Frost,data = states)
+fit2 <- lm(Murder~Population+Illiteracy,data = states)
+anova(fit2,fit1)
+AIC(fit1,fit2)
 
+#逐步回归
+library(MASS)
+fit1 <- lm(Murder~Population+Illiteracy+Income+Frost,data = states)
+stepAIC(fit1,direction = "backward")
+#全子集回归
+install.packages("leaps")
+library(leaps)
+leaps <- regsubsets(Murder~Population+Illiteracy+Income+Frost,data = states,nbest=4)
+plot(leaps,scale = "adjr2")
+subsets(leaps,statistic="cp",main="cp plot for all subsets regression")
+abline(1,1,lty=2,col="red")
+#深层次分析,交叉验证
+library(bootstrap)
+shrinkage <- function(fit,k=10) {
+  require(bootstrap)
+  theta.fit <- function(x,y){lsfit(x,y)}
+  theta.predict <- function(fit,x){cbind(1,x)%*%fit$coef}
+  x<- fit$model[,2:ncol(fit$model)]
+  y <- fit$model[,1]
+  results <- crossval(x,y,theta.fit,theta.predict,ngroup = k)
+  r2 <-cor(y,fit$fitted.values)^2
+  r2cv <- cor(y,results$cv.fit)^2
+  cat("original r square = ",r2,"\n")
+  cat(k,"fold cross validated r square =",r2cv,"\n")
+  cat("change = ",r2-r2cv,"\n")
+  }
+fit <- lm(Murder~ Population+Illiteracy+Income + Frost,data=states)
+shrinkage(fit)
+fit2 <- lm(Murder~Population+Illiteracy,data = states)
+shrinkage(fit2)
 
-
-
-
-
-
-
-
+#相对重要性
+zstates <- as.data.frame(scale(states))
+zfit <- lm(Murder~ Population+Illiteracy+Income + Frost,data=zstates)
+coef(zfit)
+#计算预测变量的相对权重
+relweights <- function(fit,...){
+  r <- cor(fit$model)
+  nvar <- ncol(r)
+  rxx <- r[2:nvar,2:nvar]
+  rxy <- r[2:nvar,1]
+  svd <- eigen(rxx)
+  evec <- svd$vectors
+  ev <- svd$values
+  delta <- diag(sqrt(ev))
+  lambda <- evec %*% delta%*%t(evec)
+  lambdasq <- lambda^2
+  beta <- solve(lambda) %*% rxy
+  rsquare <- colSums(beta^2)
+  rawwgt <- lambdasq %*% beta^2
+  import <- (rawwgt/rsquare)*100
+  lbls <- names(fit$model)[2:nvar]
+  rownames(import) <- lbls
+  colnames(import) <- "weight"
+  barplot(t(import),names.arg = lbls,
+          ylab = "% of r square",
+          xlab = "predictor variable",
+          main = "relative importance of predictor variance",
+          sub = paste("r square = ",round(rsquare,digits = 3)),
+          ...)
+  return(import)
+    }
+fit <- lm(Murder~ Population+Illiteracy+Income + Frost,data=states)
+relweights(fit,col="lightgrey")
 
 
 
