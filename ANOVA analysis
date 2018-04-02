@@ -1,1 +1,15 @@
 # R-
+aov()函数的语法为aov(formula, data = dataframe)，表9-4列举了表达式中可以使用的特殊符号。y是因变量，字母A、B、C代表因子。
+    ~ 分隔符号，左边为响应变量，右边为解释变量。例如，用A、B和C预测y，代码为y~ A + B + C
+    + 分隔解释变量
+    : 表示变量的交互项。例如，用A、B和A与B的交互项来预测y，代码为y~ A + B + A:B
+    * 表示所有可能交互项。代码y~ A * B * C可展开为y ~ A + B + C + A:B + A:C + B:C + A:B:C
+    ^ 表示交互项达到某个次数。代码y ~ (A + B + C)^2可展开为y ~ A + B + C + A:B + A:C + B:C
+    . 表示包含除因变量外的所有变量。例如，若一个数据框包含变量y、A、B和C，代码y ~ .可展开为y ~ A + B + C
+    单因素ANOVA y ~ A
+    含单个协变量的单因素ANCOVA y ~ x + A
+    双因素ANOVA y ~ A * B
+    含两个协变量的双因素ANCOVA y ~ x1 + x2 + A*B
+    随机化区组 y ~ B + A（B是区组因子）
+    单因素组内ANOVA y ~ A + Error(Subject/A)
+    含单个组内因子（W）和单个组间因子（B）的重复测量ANOVA y ~ B * W + Error(Subject/W)
