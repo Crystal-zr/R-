@@ -9,3 +9,110 @@ pwr.p.test() 比例（单样本）
 pwr.r.test() 相关系数
 pwr.t.test() t检验（单样本、两样本、配对）
 pwr.t2n.test() t检验（n不相等的两样本）
+
+#t 检验pwr.t.test()函数
+   pwr.t.test(n= ,d=  , sig.level= ,power= ,alternatve= )
+   n为样本大小。
+ d为效应值，即标准化的均值之差。
+     d =（u1-u2）/σ
+ 其中：μ1= 组1均值，μ2= 组2均值，σ2 = 误差方差
+ sig.level表示显著性水平（默认为0.05）。
+ power为功效水平。
+ type指检验类型：双样本t检验（two.sample）、单样本t检验（one.sample）或相依样本t检验（paired）。默认为双样本t检验。
+   alternative指统计检验是双侧检验（two.sided）还是单侧检验（less或greater）。默认为双侧检验。
+install.packages("pwr")
+library(pwr)
+pwr.t.test(d=.8,sig.level = .05,power = .9,type = "two.sample",alternative = "two.sided")
+pwr.t.test(n=20,d=.5,sig.level = .01,type = "two.sample",alternative = "two.sided")
+
+#方差分析：pwr.anova.test()函数可以对平衡单因素方差分析进行功效分析
+    pwr.anova.test(k= ,n= ,f= ,sig.level =  ,power = )
+    k是组的个数，n是各组中的样本大小。对于单因素方差分析，效应值可通过f来衡量：其中，pi = ni/N，
+    ni = 组i的观测数目，N = 总观测数目，μi= 组i均值，μ= 总体均值，σ2 = 组内误差方差
+    pwr.anova.test(k=5,f=.25,sig.level =.05,power = .8 )
+
+#相关性pwr.r.test()函数可以对相关性分析进行功效分析
+    pwr.r.test(n= ,r= ,sig.level = ,power = ,alternative = )
+    其中，n是观测数目，r是效应值（通过线性相关系数衡量），sig.level是显著性水平，power是功效水平，alternative指定显著
+    性检验是双边检验（tow.sided）还是单边检验（less或greater）
+    pwr.r.test(r=.25,sig.level = .05,power = .9,alternative = "greater")
+    
+#线性模型 pwr.f2.test()函数可以完成相应的功效分析
+   pwr.f2.test(u=,v= ,f2=,sig.level = ,power =)
+   u和v分别是分子自由度和分母自由度，f2是效应值
+   pwr.f2.test(u=3,f2=0.0769,sig.level = 0.05,power = 0.9)
+
+#比例检验:使用pwr.2p.test()函数进行功效分析
+   pwr.2p.test(h=,n= ,sig.level = ,power =,alternative = )
+   h是效应值，n是各组相同的样本量。效应值h定义如下：ES.h(p1, p2)函数进行计算。
+   pwr.2p.test(h=ES.h(.65,.6),sig.level = .05,power = .9,alternative = "greater")
+
+#卡方检验。pwr.chisq.test()函数可以评估卡方检验的功效、效应值和所需的样本大小
+   pwr.chisq.test(w=,N= ,df=,sig.level =,power = )
+   w是效应值，N是总样本大小，df是自由度。此处，效应值w如下定义:函数ES.w2(P)可以计算双因素列联表中备择假设的效应值，P是一个假设的双因素概率表。
+   prob <- matrix(c(0.42,0.28,0.03,0.07,0.1,0.1),byrow=TRUE,nrow=3)
+   ES.w2(prob)
+   pwr.chisq.test(w=ES.w2(prob),df=2,sig.level = .05,power = .9)
+
+#单因素ANOVA中检测显著效应所需的样本大小
+es <- seq(.1,.5,.01)
+nes <- length(es)
+samsize <- NULL
+for(i in 1:nes){
+  result <- pwr.anova.test(k=5,f=es[i],sig.level = .05,power = .9)
+  samsize[i] <- ceiling(result$n)
+}
+plot(samsize,es,type = "l",lwd=2,col="red",
+     ylab = "effect size",
+     xlab = "sample size per cell",
+     main = "one way anova with power=.9 and alpha=.05")
+
+#检验各种效应值下的相关性所需的样本量曲线
+r <- seq(.1,.5,.01)
+nr <- length(r)
+p <- seq(.4,.9,.1)
+np <- length(p)
+samsize <- array(numeric(nr*np),dim=c(nr,np))
+for (i in 1: np) {
+  for(j in 1: nr){
+    result <- pwr.r.test(n=NULL,r=r[j],
+            sig.level = .05,power=p[i],
+            alternative = "two.sided")
+    samsize[j,i] <- ceiling(result$n)
+  }
+}
+xrange <- range(r)
+yrange <- round(range(samsize))
+colors<- rainbow(length(p))
+plot(xrange,yrange,type="n",
+     xlab ="correlation coefficients",
+     ylab="sample size" )
+for (i in 1:np){
+  lines(r,samsize[,i],type = "l",lwd=2,col=colors[i])
+  }
+abline(v=0,h=seq(0,yrange[2],50),lty=2,col="grey89")  
+abline(h=0,v=seq(xrange[1],xrange[2],.02),lty=2,col="gray89")
+title("sample size estimation for correlation studies sig=.05")  
+legend("topright",title = "power",as.character(p),fill = colors)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
