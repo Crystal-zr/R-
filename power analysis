@@ -1,0 +1,11 @@
+# R-
+#用pwr 包做功效分析
+pwr.2p.test() 两比例（n相等）
+pwr.2p2n.test() 两比例（n不相等）
+pwr.anova.test() 平衡的单因素ANOVA
+pwr.chisq.test() 卡方检验
+pwr.f2.test() 广义线性模型
+pwr.p.test() 比例（单样本）
+pwr.r.test() 相关系数
+pwr.t.test() t检验（单样本、两样本、配对）
+pwr.t2n.test() t检验（n不相等的两样本）
