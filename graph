@@ -51,8 +51,41 @@ legend 图例标签组成的字符型向量… 其他选项。如果图例标示
 location 文本的位置参数。可为一对x,y坐标，也可通过指定location为locator(1)使用鼠标交互式地确定摆放位置
 pos 文本相对于位置参数的方位。1=下，2=左，3=上，4=右。如果指定了pos，就可以同时指定参数offset=作为偏移量，以相对于单个字符宽度的比例表示
 side 指定用来放置文本的边。1=下，2=左，3=上，4=右。你可以指定参数line=来内移或外移文本，随着值的增加，文本将外移。也可使用adj=0将文本向左下对齐，或使用adj=1右上对齐
+  
+  
+  
       
-      
+ggplot2中最简单的绘图方式是利用qplot()函数，即快速绘图函数。
+     qplot(x,y,data= ,color=,shape=,size=,alpha=,gepm=,method=,formula=,facets=,xlim=,ylim=,xlab=,ylab=,main=,sub=)
+alpha 元素重叠的alpha透明度，数值为0（完全透明）到1（完全不透明）间的分数
+color、shape、size、fill 把变量的水平与符号颜色、形状或大小联系起来。对于直线图，colo将把线条颜色与变量水平联系起来，对于密度图和箱线图，
+     fill将把填充颜色与变量联系起来。图例将会被自动绘制
+data 指定一个数据框
+facets 指定条件变量，创建一个栅栏图。表达式如rowvar ~ colvar（示例见图16-10）。为创建一个基于单条件变量的栅栏图，可用rowvar ~ .或. ~ colvar
+geom 设定定义图形类型的几何形状。geom选项是一个单条目或多条目的字符型向量，包括"point" 、"smooth" 、"boxplot" 、 "line" 、"histogram" 、
+     "density"、"bar"和"jitter"
+main、sub 字符向量，设定标题和副标题
+method、formula 若geom = "smooth"，则会默认添加一条平滑拟合曲线和置信区间。 当观测数大于1000时，便需要调用更高效的平滑拟合算法。方法包括回归lm、
+     广义可加模型gam、稳健回归rlm。formula参数指定拟合的形式例如，要添加简单的回归曲线，则设定geom = "smooth", method = "lm",
+    formula = y ~ x。将表达式改为y ~ poly(x, 2)将生成二次拟合。注意表达式使用的是字母x和y，而不是变量的名称对于method = "gam"，一定要记得加
+    载mgcv包。对于method = "rml"，则需加载MASS包
+x、y 指定摆放在水平轴和竖直轴的变量。对于单变量图形（如直方图），则省略y
+xlab、ylab 字符向量，设定横轴和纵轴标签
+xlim、ylim 二元素数值型向量，分别指定横轴和纵轴的最小值和最大值
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
